@@ -6,8 +6,13 @@ So far only:
 
 Usage:
 
+```
 $ python bom.py test.xml
-
+```
 Creates test.xlsx with the BOM.
 
-Requires Python 3.x and the Pandas library.
+Requires Python 3.x and the Pandas library. If this is not available, install it with
+
+```
+pip install pandas
+```
