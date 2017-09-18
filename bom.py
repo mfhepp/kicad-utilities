@@ -3,7 +3,7 @@
 # a Bill of Materials.
 # Parts with identical Manufacturer Part Numbers (mpn) are combined,
 # independent of the part reference
-# Written by Martin Hepp, www.heppnetz.def
+# Written by Martin Hepp, www.heppnetz.de
 
 import os
 import sys
