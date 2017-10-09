@@ -30,7 +30,7 @@ def main(args, loglevel):
     if args.mpn is not None:
         MPN_FIELD = args.mpn
     else:
-        MPN_FIELD = 'mpn'
+        MPN_FIELD = 'MPN'
 
     logging.info('Using %s as the MPN field name' % MPN_FIELD)
     bom = {}
@@ -39,18 +39,26 @@ def main(args, loglevel):
     c = root.find('components')
     for comp in c.findall('comp'):
         component = {}
-        component['ref'] = comp.get('ref')
+        component['ref'] = comp.get('ref', 'missing').strip()
         component['qtty'] = 1
-        component['value'] = comp.find('value').text
-        component['footprint'] = comp.find('footprint').text
+        if comp.find('value') is not None:
+            component['value'] = comp.find('value').text
+        else:
+            component['value'] = 'missing'
+            logging.warning('Value missing for  %s' % component['ref'])
+        if comp.find('footprint') is not None:
+            component['footprint'] = comp.find('footprint').text
+        else:
+            component['footprint'] = 'missing'
+            logging.warning('Footprint missing for  %s' % component['ref'])
         fields = comp.find('fields')
         if fields is not None:
             for field in fields.findall('field'):
                 name = field.get('name')
                 value = field.text
                 component[name] = value
-            mpn = component.get(MPN_FIELD, None)
-            if mpn is None or mpn == 'n/a':
+            mpn = component.get(MPN_FIELD, '').strip()
+            if not mpn or mpn == 'n/a':
                 mpn = 'N/A-' + component['ref']
         else:
             mpn = 'N/A-' + component['ref']
